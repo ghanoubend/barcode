@@ -51,12 +51,12 @@
     Quagga.onDetected((result) => {
             const codeBarre = result.codeResult.code;
             console.log("Code-barres détecté : " + codeBarre);
-last_result.push(codeBarre);
 
-if (last_result.length >= 5){
 
-  code = maxoccurence(last_result);
-   container.innerHTML=code;
+if (codeBarre.startsWith("P1") || codeBarre.startsWith("P2") || codeBarre.startsWith("D"){
+
+ 
+   container.innerHTML=codeBarre;
    document.getElementById("code-barre-input").value = codeBarre;
    Quagga.stop();
           
