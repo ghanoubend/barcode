@@ -24,7 +24,7 @@
         document.getElementById("start-camera").addEventListener("click", () => {
   // Demander l'autorisation d'accès à la caméra
   navigator.mediaDevices
-    .getUserMedia({ video: true })
+    .getUserMedia({ video: { facingMode: "environment" } })
     .then((stream) => {
       // Afficher le flux de la caméra dans un élément vidéo
       const videoElement = document.createElement("video");
