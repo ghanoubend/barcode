@@ -17,12 +17,27 @@
         const container= document.getElementById('result');
 
 
-        // Configuration de QuaggaJS
-        Quagga.init(
+        
+
+        document.getElementById("start-camera").addEventListener("click", () => {
+  // Demander l'autorisation d'accès à la caméra
+  navigator.mediaDevices
+    .getUserMedia({ video: true })
+    .then((stream) => {
+      // Afficher le flux de la caméra dans un élément vidéo
+      const videoElement = document.createElement("video");
+      videoElement.srcObject = stream;
+      document.body.appendChild(videoElement);
+
+      // Démarrer la lecture du flux vidéo
+      videoElement.play();
+
+      // Configurer QuaggaJS pour utiliser le flux vidéo de la caméra
+     Quagga.init(
       {
         inputStream: {
           type: "LiveStream",
-          target: document.getElementById('barcode-scanner'),
+          target: VideoElement,
           constraints: {
             width: 640,
             height: 480,
@@ -45,24 +60,35 @@
       
       }
     );
-        
-        
-       var last_result = [];
-    Quagga.onDetected((result) => {
-            const codeBarre = result.codeResult.code;
-            console.log("Code-barres détecté : " + codeBarre);
 
+      // Gérer la détection des codes-barres avec QuaggaJS
+      Quagga.onDetected((result) => {
+        const codeBarre = result.codeResult.code;
+        alert("Code-barres détecté : " + codeBarre);
 
-if (codeBarre.startsWith("P1") || codeBarre.startsWith("P2") || codeBarre.startsWith("D")){
+        if (codeBarre.startsWith("P1") || codeBarre.startsWith("P2") || codeBarre.startsWith("D")){
 
  
    container.innerHTML=codeBarre;
    document.getElementById("code-barre-input").value = codeBarre;
    Quagga.stop();
-          
+   stream.getTracks().forEach((track) => {
+          track.stop();
+        });
+            videoElement.remove();
 }
-           
-       });
+
+      
+       
+
+        
+       
+      });
+    })
+    .catch((error) => {
+      console.error("Erreur lors de l'accès à la caméra :", error);
+    });
+});
 
         
 
